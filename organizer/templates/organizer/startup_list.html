@@ -1,0 +1,35 @@
+{% extends parent_template|default:"organizer/base_organizer.html" %}
+
+{% block title %}
+{{ block.super }} - Startups
+{% endblock %}
+
+{% block content %}
+<h2>Startup List</h2>
+<ul>
+    {% for startup in startup_list %}
+    <li><a href="{% url 'organizer_startup_detail' startup.slug %}">{{ startup.name }}</a></li>
+    {% empty %}
+    <li><em>No startups available!</em></li>
+    {% endfor %}
+</ul>
+
+{% if is_paginated %}
+    <div>
+        {% if previous_page_url %}
+                <a href="{{ previous_page_url }}">Previous</a>
+        {% endif %}
+        Page {{ startup_list.number }} of {{ paginator.num_pages }}
+        {% if next_page_url %}
+                <a href="{{ next_page_url }}">Next</a>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% endblock %}
+
+<!-- We have defined get_absolute_url() method on Startup model, so we can replace url template tag
+with a template variable. Like so-
+    <li><a href="{% url 'organizer_startup_detail' startup.slug %}">
+    <li><a href="{{ startup.get_absolute_url }}">
+ -->
