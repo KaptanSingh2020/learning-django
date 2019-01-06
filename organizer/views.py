@@ -5,7 +5,10 @@ from django.shortcuts import get_object_or_404, render_to_response, render
 from .forms import TagForm
 from django.shortcuts import redirect
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.views.generic import View
+from django.views.generic import View, CreateView, DeleteView, DetailView, ListView
+from django.contrib.auth.decorators import login_required, permission_required
+from django.utils.decorators import method_decorator
+
 
 class TagList(View):
     page_qwarg = 'page'
@@ -38,6 +41,15 @@ class TagList(View):
             'tag_list': page
         }
         return render(request, self.template_name, context)
+
+class TagCreate(CreateView):
+    form_class = TagForm
+    model = Tag
+
+    @method_decorator(login_required)
+    @method_decorator(permission_required('organizer.add_tag', raise_exception=True))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
 
 def tag_list_2(request): # homepage() is now tag_list()
