@@ -10,5 +10,10 @@
         {% include "user/login_form.html" %}
     </div>
 </div>
+<div>
+    <ul>
+        <li><a href="{% url "dj-auth:pw_reset_start" %}">Forgotten password?</a></li>
+    </ul>
+</div>
     
 {% endblock %}
